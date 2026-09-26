@@ -1,6 +1,7 @@
 """LegacyLift Streamlit dashboard."""
 from pathlib import Path
 import json
+import pandas as pd
 import streamlit as st
 import plotly.graph_objects as go
 
@@ -29,8 +30,8 @@ with open(METRICS_FILE) as f:
 # ── Header ───────────────────────────────────────────────────────────────────
 st.title("LegacyLift – Legacy to Modern, with Tests as Proof")
 st.caption(
-    f"Spring PetClinic: Java 8 + Boot 2.7.3 → Java 21 + Boot 3.4.5, "
-    "powered by IBM Bob"
+    f"Spring PetClinic: Java {m['java_before']} + Boot {m['boot_before']} "
+    f"→ Java {m['java_after']} + Boot {m['boot_after']}, powered by IBM Bob"
 )
 
 st.divider()
@@ -43,13 +44,21 @@ with c1:
     st.write("Architecture analysis, dependency diagram, migration inventory and risk list.")
 with c2:
     st.markdown("### ✅ Protect")
-    st.write("30 characterization tests added (OwnerTests, PetValidatorTests, VisitTests + extensions).")
+    tests_added = m["tests_after"] - m["tests_before"]
+    st.write(f"{tests_added} characterization tests added (OwnerTests, PetValidatorTests, VisitTests + extensions).")
 with c3:
     st.markdown("### ✅ Migrate")
-    st.write("javax → jakarta, Boot 2.7.3 → 3.4.5, Java 8 → 21, all dependency updates applied.")
+    st.write(
+        f"javax → jakarta, Boot {m['boot_before']} → {m['boot_after']}, "
+        f"Java {m['java_before']} → {m['java_after']}, all dependency updates applied."
+    )
 with c4:
     st.markdown("### ✅ Prove")
-    st.write("71 tests passing, 0 failures, branch coverage held at 96.8 %.")
+    st.write(
+        f"70/70 executed tests passing (1 skipped), "
+        f"{m['tests_failed_after_migration']} failures, "
+        f"branch coverage held at {m['branch_cov_after_migration']} %."
+    )
 
 st.divider()
 
@@ -80,6 +89,7 @@ with k4:
         label="javax files",
         value=m["javax_files_after"],
         delta=f"-{m['javax_files_before']} (was {m['javax_files_before']})",
+        delta_color="inverse",
     )
 
 st.divider()
@@ -90,30 +100,36 @@ ch1, ch2 = st.columns(2)
 
 with ch1:
     stages = ["Baseline", "After Char. Tests", "After Migration"]
+    instr_y = [
+        m["instruction_cov_baseline"],
+        m["instruction_cov_after_tests"],
+        m["instruction_cov_after_migration"],
+    ]
+    branch_y = [
+        m["branch_cov_baseline"],
+        m["branch_cov_after_tests"],
+        m["branch_cov_after_migration"],
+    ]
     fig_cov = go.Figure(data=[
         go.Bar(
             name="Instruction Coverage (%)",
             x=stages,
-            y=[
-                m["instruction_cov_baseline"],
-                m["instruction_cov_after_tests"],
-                m["instruction_cov_after_migration"],
-            ],
+            y=instr_y,
+            text=[f"{v} %" for v in instr_y],
+            textposition="outside",
         ),
         go.Bar(
             name="Branch Coverage (%)",
             x=stages,
-            y=[
-                m["branch_cov_baseline"],
-                m["branch_cov_after_tests"],
-                m["branch_cov_after_migration"],
-            ],
+            y=branch_y,
+            text=[f"{v} %" for v in branch_y],
+            textposition="outside",
         ),
     ])
     fig_cov.update_layout(
         barmode="group",
         title="Coverage Across Stages",
-        yaxis=dict(range=[80, 100], title="%"),
+        yaxis=dict(range=[0, 100], title="%"),
         legend=dict(orientation="h", yanchor="bottom", y=1.02),
         margin=dict(t=60),
     )
@@ -138,8 +154,6 @@ st.divider()
 
 # ── Before / After table ─────────────────────────────────────────────────────
 st.subheader("Before / After")
-import pandas as pd  # noqa: E402 — import here to keep top cleaner
-
 table = pd.DataFrame(
     {
         "Component": ["Java", "Spring Boot"],
