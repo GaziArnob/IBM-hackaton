@@ -61,22 +61,28 @@ class VisitControllerTests {
 	@Test
 	void testInitNewVisitForm() throws Exception {
 		mockMvc.perform(get("/owners/{ownerId}/pets/{petId}/visits/new", TEST_OWNER_ID, TEST_PET_ID))
-				.andExpect(status().isOk()).andExpect(view().name("pets/createOrUpdateVisitForm"));
+			.andExpect(status().isOk())
+			.andExpect(view().name("pets/createOrUpdateVisitForm"));
 	}
 
 	@Test
 	void testProcessNewVisitFormSuccess() throws Exception {
-		mockMvc.perform(post("/owners/{ownerId}/pets/{petId}/visits/new", TEST_OWNER_ID, TEST_PET_ID)
-				.param("name", "George").param("description", "Visit Description"))
-				.andExpect(status().is3xxRedirection()).andExpect(view().name("redirect:/owners/{ownerId}"));
+		mockMvc
+			.perform(post("/owners/{ownerId}/pets/{petId}/visits/new", TEST_OWNER_ID, TEST_PET_ID)
+				.param("name", "George")
+				.param("description", "Visit Description"))
+			.andExpect(status().is3xxRedirection())
+			.andExpect(view().name("redirect:/owners/{ownerId}"));
 	}
 
 	@Test
 	void testProcessNewVisitFormHasErrors() throws Exception {
-		mockMvc.perform(
-				post("/owners/{ownerId}/pets/{petId}/visits/new", TEST_OWNER_ID, TEST_PET_ID).param("name", "George"))
-				.andExpect(model().attributeHasErrors("visit")).andExpect(status().isOk())
-				.andExpect(view().name("pets/createOrUpdateVisitForm"));
+		mockMvc
+			.perform(post("/owners/{ownerId}/pets/{petId}/visits/new", TEST_OWNER_ID, TEST_PET_ID).param("name",
+					"George"))
+			.andExpect(model().attributeHasErrors("visit"))
+			.andExpect(status().isOk())
+			.andExpect(view().name("pets/createOrUpdateVisitForm"));
 	}
 
 	@Test
@@ -84,10 +90,12 @@ class VisitControllerTests {
 		// CHARACTERIZATION: loadPetWithVisit() adds a blank Visit to the pet BEFORE the
 		// handler method runs; the model's "pet" already contains the new (empty) visit
 		mockMvc.perform(get("/owners/{ownerId}/pets/{petId}/visits/new", TEST_OWNER_ID, TEST_PET_ID))
-				.andExpect(status().isOk()).andExpect(model().attributeExists("pet")).andExpect(result -> {
-					Pet pet = (Pet) result.getModelAndView().getModel().get("pet");
-					assertThat(pet.getVisits()).hasSize(1);
-				});
+			.andExpect(status().isOk())
+			.andExpect(model().attributeExists("pet"))
+			.andExpect(result -> {
+				Pet pet = (Pet) result.getModelAndView().getModel().get("pet");
+				assertThat(pet.getVisits()).hasSize(1);
+			});
 	}
 
 }
