@@ -218,4 +218,13 @@ class OwnerControllerTests {
 				}))).andExpect(view().name("owners/ownerDetails"));
 	}
 
+	@Test
+	void testProcessFindForm_noLastNameParam_returnsOwnersList() throws Exception {
+		// CHARACTERIZATION: GET /owners with no lastName parameter treats lastName as ""
+		// which matches all owners; with >1 result the ownersList view is returned
+		Page<Owner> tasks = new PageImpl<Owner>(Lists.newArrayList(george(), new Owner()));
+		Mockito.when(this.owners.findByLastName(anyString(), any(Pageable.class))).thenReturn(tasks);
+		mockMvc.perform(get("/owners?page=1")).andExpect(status().isOk()).andExpect(view().name("owners/ownersList"));
+	}
+
 }

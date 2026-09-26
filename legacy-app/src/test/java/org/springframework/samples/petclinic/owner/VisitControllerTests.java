@@ -16,6 +16,7 @@
 
 package org.springframework.samples.petclinic.owner;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -76,6 +77,17 @@ class VisitControllerTests {
 				post("/owners/{ownerId}/pets/{petId}/visits/new", TEST_OWNER_ID, TEST_PET_ID).param("name", "George"))
 				.andExpect(model().attributeHasErrors("visit")).andExpect(status().isOk())
 				.andExpect(view().name("pets/createOrUpdateVisitForm"));
+	}
+
+	@Test
+	void testLoadPetWithVisit_petInModelHasVisitPreAttached() throws Exception {
+		// CHARACTERIZATION: loadPetWithVisit() adds a blank Visit to the pet BEFORE the
+		// handler method runs; the model's "pet" already contains the new (empty) visit
+		mockMvc.perform(get("/owners/{ownerId}/pets/{petId}/visits/new", TEST_OWNER_ID, TEST_PET_ID))
+				.andExpect(status().isOk()).andExpect(model().attributeExists("pet")).andExpect(result -> {
+					Pet pet = (Pet) result.getModelAndView().getModel().get("pet");
+					assertThat(pet.getVisits()).hasSize(1);
+				});
 	}
 
 }

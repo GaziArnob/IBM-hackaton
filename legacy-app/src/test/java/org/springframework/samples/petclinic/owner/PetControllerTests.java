@@ -107,4 +107,23 @@ class PetControllerTests {
 				.andExpect(view().name("pets/createOrUpdatePetForm"));
 	}
 
+	@Test
+	void testProcessCreationForm_duplicatePetName_rejectsWithDuplicateCode() throws Exception {
+		// CHARACTERIZATION: when a new pet name already belongs to an existing
+		// (persisted)
+		// pet of the same owner, processCreationForm rejects the "name" field with code
+		// "duplicate"
+		Owner ownerWithExistingPet = new Owner();
+		Pet existing = new Pet();
+		existing.setId(TEST_PET_ID);
+		existing.setName("Max");
+		ownerWithExistingPet.getPets().add(existing);
+		given(this.owners.findById(TEST_OWNER_ID)).willReturn(ownerWithExistingPet);
+
+		mockMvc.perform(post("/owners/{ownerId}/pets/new", TEST_OWNER_ID).param("name", "Max").param("type", "hamster")
+				.param("birthDate", "2020-01-01"))
+				.andExpect(model().attributeHasFieldErrorCode("pet", "name", "duplicate")).andExpect(status().isOk())
+				.andExpect(view().name("pets/createOrUpdatePetForm"));
+	}
+
 }
