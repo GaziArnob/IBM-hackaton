@@ -16,7 +16,7 @@ codebase, Protect it with characterization tests, Migrate the code and build, Pr
 green test run) required **1.7 hours** of elapsed time. The characterization safety net grew from
 41 original tests to **71 tests**, all of which passed on the new platform with **zero regressions**.
 The entire `javax.persistence`, `javax.validation`, and `javax.xml.bind` namespace was replaced
-with `jakarta.*` across 14 source files, and 10 build-level items in `pom.xml` were updated.
+with `jakarta.*` across 13 production source files and 1 test file, and 13 build-level items in `pom.xml` were updated.
 No production logic was altered; only imports, build descriptors, and code formatting changed.
 
 ---
@@ -71,12 +71,12 @@ No production logic was altered; only imports, build descriptors, and code forma
 | Measure | Value |
 |---------|-------|
 | **Time with LegacyLift** | **1.7 hours** (git history: first commit 14:08 → migration commit 15:48, 2026-09-26) |
-| **Estimated manual time** _(estimate — see note)_ | **24 hours** (understand codebase 4 h + write 30 characterization tests 8 h + migrate 14 import files and 10 build items incl. debugging 10 h + documentation 2 h) |
+| **Estimated manual time** _(estimate — see note)_ | **24 hours** (understand codebase 4 h + write 30 characterization tests 8 h + migrate 14 import files and 13 build items incl. debugging 10 h + documentation 2 h) |
 | **Time saved** | **92.9 %** (= (24 − 1.7) / 24) |
 
 > **Note:** The manual estimate of 24 hours is an informed approximation based on the scope of work
 > observed: 23 Java source files read and analysed, 30 test methods written, 14 import files
-> migrated, 10 `pom.xml` items updated, and 3 structured reports authored. Actual manual time would
+> migrated, 13 `pom.xml` items updated, and 3 structured reports authored. Actual manual time would
 > vary with team experience.
 
 ---
@@ -96,7 +96,7 @@ No test assertion, expected value, `@MockBean`, or `@Disabled` annotation was al
 
 ## 5. What Changed
 
-### Build (2 files, 10 `pom.xml` items)
+### Build (2 files, 13 `pom.xml` items)
 
 | Item | Change |
 |------|--------|
@@ -114,7 +114,7 @@ No test assertion, expected value, `@MockBean`, or `@Disabled` annotation was al
 | `pom.xml` — JAXB API | Added `jakarta.xml.bind:jakarta.xml.bind-api` |
 | `pom.xml` — build-info extra properties | Removed `java.source` / `java.target` (null in Boot 3 parent) |
 
-### Imports (14 production files + 1 test file)
+### Imports (13 production files + 1 test file = 14)
 
 | Namespace replaced | Files affected |
 |--------------------|---------------|
@@ -141,9 +141,9 @@ No `application.properties` values were changed. All keys are valid in Spring Bo
 
 | Risk | Severity | Detail |
 |------|----------|--------|
-| `PetController` branch coverage at 83.3 % | Medium | 2 branches inside the `@ModelAttribute` `findPet` null-check remain uncovered by JaCoCo; structurally exercised but the bytecode sub-expression is not reachable by the current test setup |
-| `@MockBean` deprecated in Spring Boot 3.4 | Low | All 5 test classes still use `@MockBean`; it continues to function but will be removed in a future Boot release — should be replaced with `@MockitoBean` when upgrading past 3.4 |
-| `spring.jpa.open-in-view=true` | Low | Still valid in Boot 3 but emits a loud startup warning; lazy-loading paths that work today will throw `LazyInitializationException` if this is ever set to `false` |
+| `PetController` branch coverage at 83.3 % | Medium | 2 branches in `PetController` are not covered by tests |
+| `@MockBean` deprecated in Spring Boot 3.4 | Low | All 4 test classes still use `@MockBean`; it continues to function but will be removed in a future Boot release — should be replaced with `@MockitoBean` when upgrading past 3.4 |
+| `spring.jpa.open-in-view=true` | Low | Still valid in Boot 3; lazy-loading paths that work today will throw `LazyInitializationException` if this is ever set to `false` |
 | Mockito self-attach warning on JDK 21 | Low | `Mockito is currently self-attaching to enable the inline-mock-maker` appears in test output; will stop working in a future JDK — requires adding Mockito as a `-javaagent` in Surefire config |
 | Gradle build not migrated | Medium | `build.gradle` and associated files were not touched; the Gradle build will not compile on Java 21 with the current `plugins {}` block referencing Boot 2.7.3 — should be migrated or removed |
 
@@ -151,7 +151,7 @@ No `application.properties` values were changed. All keys are valid in Spring Bo
 
 ## 7. Recommended Next Steps
 
-1. **Replace `@MockBean` with `@MockitoBean`** across the 5 affected test classes to remove the Boot 3.4 deprecation warning and future-proof the test suite.
+1. **Replace `@MockBean` with `@MockitoBean`** across the 4 affected test classes to remove the Boot 3.4 deprecation warning and future-proof the test suite.
 2. **Configure Mockito as a JVM agent** in `maven-surefire-plugin` (`<argLine>-javaagent:...</argLine>`) to eliminate the self-attach warning and ensure compatibility with JDK 24+.
 3. **Set `spring.jpa.open-in-view=false`** in `application.properties` and run the full test suite to verify there are no lazy-loading regressions in the codebase.
 4. **Migrate or remove the Gradle build** — update `build.gradle` to Spring Boot 3.4.5 and Java 21, or delete it to avoid confusion about which build descriptor is canonical.

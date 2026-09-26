@@ -79,7 +79,7 @@
 ### Config
 
 No `application.properties` values were changed. All existing keys are valid in Spring Boot 3.4.5.  
-`spring.jpa.open-in-view=true` is kept as-is (still valid, generates a warning — not changed per task rules).
+`spring.jpa.open-in-view=true` is kept as-is (still valid in Boot 3 — not changed per task rules).
 
 ---
 

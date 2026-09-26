@@ -44,10 +44,7 @@
 | | Branch | 75.0 % | **83.3 %** |
 | | Line | 96.8 % | **100 %** |
 
-> `PetController` branch coverage did not reach 100 % because the remaining 2 uncovered branches
-> are inside the `@ModelAttribute` resolver for `findPet` (choosing between new vs. existing pet by
-> `petId` null-check) — these are covered structurally by the existing init/update form tests but
-> JaCoCo counts one sub-expression branch as unreachable in this bytecode version.
+> `PetController` branch coverage did not reach 100 % because 2 branches in `PetController` are not covered by tests.
 
 ---
 

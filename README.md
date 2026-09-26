@@ -2,6 +2,19 @@
 
 > AI-assisted modernisation of a legacy Java application — with test-backed safety at every step.
 
+## Results
+
+| Metric | Value |
+|--------|-------|
+| **Time saved** | 92.9 % (1.7 h with LegacyLift vs. 24 h manual estimate) |
+| **Tests** | 41 → 71 |
+| **Failures after migration** | 0 |
+| **`javax.*` files** | 14 → 0 |
+
+See [`reports/MIGRATION_REPORT.md`](reports/MIGRATION_REPORT.md) for the full breakdown.
+
+---
+
 ## Description
 
 LegacyLift demonstrates a repeatable, four-phase strategy for safely modernising a legacy Java
@@ -9,12 +22,12 @@ codebase using IBM Bob as the AI pair-programmer. In the **Explain** phase Bob r
 source tree, maps its structure, and produces a plain-language summary of what the application
 does and how it is wired together. In the **Protect** phase Bob generates a comprehensive JUnit 5
 test suite that locks in the current observable behaviour — these tests become the safety net for
-every subsequent change. In the **Migrate** phase Bob applies incremental, targeted refactors
-(dead-code removal, naming improvements, pattern upgrades, dependency modernisation) one step at a
-time, re-running the test suite after each change to surface regressions immediately. Finally, in
-the **Prove** phase Bob produces structured reports and dashboard metrics that show exactly what
-changed, why it changed, and that the application still behaves identically — giving stakeholders
-evidence they can act on.
+every subsequent change. In the **Migrate** phase Bob migrates the codebase from Java 8 + Spring
+Boot 2.7.3 to Java 21 + Spring Boot 3.4.5 — replacing `javax.*` imports with `jakarta.*` and
+upgrading build plugins — verified by re-running 71 characterization tests with 0 failures.
+Finally, in the **Prove** phase Bob produces structured reports and dashboard metrics that show
+exactly what changed, why it changed, and that the application still behaves identically — giving
+stakeholders evidence they can act on.
 
 ---
 
@@ -123,15 +136,14 @@ All AI-assisted work in this project is driven from the **IBM Bob IDE**. Bob is 
 
 ### Session screenshots
 
-After completing each Bob task, export or screenshot the task summary panel and save it to
-[`bob_sessions/`](bob_sessions/). File names should follow the convention:
+Screenshots of each Bob session are saved in [`bob_sessions/`](bob_sessions/):
 
 ```
 bob_sessions/
-├── 01_explain_source_map.png
-├── 02_protect_test_generation.png
-├── 03_migrate_rename_refactor.png
-└── 04_prove_report.png
+├── legacylift_task01_setup_explain_protect_overview.png
+├── legacylift_task01_setup_explain_protect_summary.png
+├── legacylift_task03_migration_summary.png
+└── legacylift_task05_migration_report_summary.png
 ```
 
 These screenshots form an **audit trail** — reviewers and judges can trace every AI-assisted
