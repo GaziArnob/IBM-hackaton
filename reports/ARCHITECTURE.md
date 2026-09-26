@@ -4,6 +4,23 @@
 > Analysed on: 2026-09-26  
 > Analyst: IBM Bob (LegacyLift project)
 
+> **Post-migration corrections (verified against the code on 2026-09-26).** This analysis was
+> written by Bob *before* the migration and is kept unchanged as a record. Human review and the
+> migration itself found these inaccuracies:
+>
+> 1. **javax file count (§6a, §7):** 14 files used `javax.*` imports, not 10. `NamedEntity`,
+>    `PetType`, `Specialty` and `Vets` were missed; `Vets` also uses JAXB (`@XmlRootElement`).
+>    The migration prompt therefore used `grep` as the source of truth, and all 14 were migrated.
+> 2. **`javax.cache` (§6e, §7):** the JCache API stays in the `javax.cache` package in Spring Boot 3.
+>    It must not be renamed to `jakarta.cache`; only the Ehcache `jakarta` classifier is needed.
+> 3. **`VetRepository#findAll()` (§6c):** not deprecated; no change was required.
+> 4. **`spring.jpa.open-in-view` (§6c):** no startup warning is printed, because the property is set
+>    explicitly to `true`.
+> 5. **Actuator security (§6d, §7):** the project has no Spring Security, so Boot 3 does not require
+>    extra security configuration; endpoint exposure behaves as before.
+>
+> See `reports/CHANGELOG.md` and `reports/MIGRATION_REPORT.md` for what was actually changed.
+
 ---
 
 ## 1. Overview

@@ -35,11 +35,11 @@ stakeholders evidence they can act on.
 
 ```
 LegacyLift/
-├── legacy-app/          # Pinned snapshot of spring-petclinic (Boot 2.7.3 / Java 8 target)
+├── legacy-app/          # spring-petclinic, migrated to Java 21 / Spring Boot 3.4.5
 │   ├── src/             # Java source and test trees
 │   ├── pom.xml          # Maven build descriptor
 │   └── mvnw / mvnw.cmd  # Maven wrapper (no separate Maven install required)
-├── reports/             # Generated analysis and refactoring reports (Markdown, HTML, DOCX)
+├── reports/             # Generated analysis and migration reports (Markdown) + metrics.json
 ├── dashboard/           # Streamlit app — visualises code-quality metrics before vs. after
 ├── bob_sessions/        # Screenshots and task-summary exports from each Bob IDE session
 ├── README.md            # This file
@@ -140,10 +140,13 @@ Screenshots of each Bob session are saved in [`bob_sessions/`](bob_sessions/):
 
 ```
 bob_sessions/
-├── legacylift_task01_setup_explain_protect_overview.png
+├── legacylift_task01_setup_explain_protect_overview.png   # Prompts 0-2: setup, Explain, Protect
 ├── legacylift_task01_setup_explain_protect_summary.png
-├── legacylift_task03_migration_summary.png
-└── legacylift_task05_migration_report_summary.png
+├── legacylift_task03_migration_summary.png                # Prompt 3: Migrate + Prove
+├── legacylift_task05_migration_report_summary.png         # Prompt 5: migration report
+├── legacylift_task06_dashboard_overview_groupmate.png     # Prompt 6: dashboard
+├── legacylift_task07_dashboard_fix_summary_groupmate.png  # Prompt 7: dashboard fixes
+└── legacylift_task08_docs_fix_summary_groupmate.png       # Prompt 8: documentation fixes
 ```
 
 These screenshots form an **audit trail** — reviewers and judges can trace every AI-assisted
