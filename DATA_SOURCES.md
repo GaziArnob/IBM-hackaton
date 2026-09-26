@@ -24,6 +24,14 @@ This document describes every data source consumed or produced by the LegacyLift
 
 ---
 
+## 1b. Converter test samples
+
+Four public projects at old Spring Boot 2.x commits, zipped in `converter/samples/` for testing the
+LegacyLift Converter. Sources, commits and licences (Apache-2.0 and MIT) are listed in
+[`converter/samples/README.md`](converter/samples/README.md). Each zip includes the original licence file.
+
+---
+
 ## 2. Maven Dependency Metadata
 
 | Property | Value |

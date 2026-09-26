@@ -42,6 +42,9 @@ LegacyLift/
 ├── reports/             # Generated analysis and migration reports (Markdown) + metrics.json
 ├── dashboard/           # Streamlit app — visualises code-quality metrics before vs. after
 ├── bob_sessions/        # Screenshots and task-summary exports from each Bob IDE session
+├── converter/           # LegacyLift Converter: one-click zip migration tool (built with Claude Code, not Bob)
+├── PROMPTS.md           # The exact IBM Bob prompts used for PetClinic
+├── PROMPTS_TEMPLATE.md  # Generic Bob prompts for any Java / Spring project
 ├── README.md            # This file
 ├── DATA_SOURCES.md      # Provenance of every data source used in the project
 └── .gitignore           # Excludes build artefacts, IDE files, Python envs, and OS noise
@@ -122,6 +125,27 @@ python -m venv .venv
 ```
 
 The app opens at **http://localhost:8501**.
+
+---
+
+## LegacyLift Converter (companion tool)
+
+A one-click web tool in [`converter/`](converter/): upload a legacy Maven + Spring Boot 2.x
+project as a `.zip` and download it migrated to Java 21 + Spring Boot 3, with a report proving
+the tests still pass. It packages the **mechanical** part of the workflow (OpenRewrite + fixes
+learned in this project).
+
+> **Transparency:** the converter was built with **Claude Code, not IBM Bob**. Everything else in
+> LegacyLift (analysis, characterization tests, migration, reports, dashboard) was done with
+> IBM Bob, as shown in [`bob_sessions/`](bob_sessions/).
+
+```powershell
+cd converter
+.\start.bat
+```
+
+Measured on the included samples: Spring PetClinic migrated with all 41 original tests passing;
+the Spring JPA guide in about 3 minutes. See [`converter/README.md`](converter/README.md).
 
 ---
 
