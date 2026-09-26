@@ -93,6 +93,25 @@ A successful run prints:
 
 ---
 
+## Dashboard
+
+Visualises migration metrics, coverage trends, before/after comparisons, and Bob session evidence.
+
+```powershell
+# 1 – Create a virtual environment (first time only)
+python -m venv .venv
+
+# 2 – Install dependencies (first time only)
+.venv\Scripts\python.exe -m pip install -r dashboard/requirements.txt
+
+# 3 – Run the dashboard
+.venv\Scripts\python.exe -m streamlit run dashboard/app.py
+```
+
+The app opens at **http://localhost:8501**.
+
+---
+
 ## Bob IDE Usage
 
 All AI-assisted work in this project is driven from the **IBM Bob IDE**. Bob is used to:
