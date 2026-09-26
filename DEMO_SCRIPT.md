@@ -1,6 +1,6 @@
 # LegacyLift – Demo Video Script
 
-**Length:** ~4 minutes · **Language:** English narration · **Resolution:** 1920×1080
+**Length:** ~4.5 minutes · **Language:** English narration · **Resolution:** 1920×1080
 
 ---
 
@@ -27,6 +27,10 @@
   .\mvnw.cmd clean test
   ```
 - [ ] Have the Bob task summary panel ready to open (Tasks → select task → click header).
+- [ ] **Converter (Scene 8):** start it with `converter\start.bat` (opens http://localhost:8502 if the
+      dashboard already uses 8501; check the terminal for the URL). Warm it up once by converting
+      `converter\samples-data-jpa-boot2.7.0.zip` before recording; the first run downloads
+      OpenRewrite recipes. **Pre-record** a full conversion of the same sample and cut the waiting.
 
 **Recording tools:** OBS Studio, or Windows `Win + Alt + R` (Xbox Game Bar), or Clipchamp for editing.
 
@@ -96,11 +100,24 @@
 
 ---
 
-### Scene 8 — Close (3:40–4:00)
+### Scene 8 — LegacyLift Converter, companion tool (3:40–4:20)
+**Screen:** Converter page → drag `03-data-jpa-boot2.7.0.zip` into the upload box → **Convert ▶** →
+(cut) steps 1/6 → 6/6 → green **SUCCESS** banner, KPI row and the blue "Test integrity" line.
+
+> "We also packaged the mechanical part of the migration into a one-click tool: LegacyLift Converter. To be transparent: this companion tool was built with Claude Code, not with IBM Bob.
+> You upload a legacy project as a zip. It builds and tests the original, upgrades it with OpenRewrite, Spring's rule-based migration engine, applies the fixes we learned in this project, and tests it again on Java 21.
+> On PetClinic it kept all 41 original tests passing. The converter does the mechanical work; Bob does what needs understanding: explaining the code and writing the tests that make the migration safe."
+
+**Keep this scene short (~40 s).** The video's focus stays on the IBM Bob workflow (Scenes 2–7).
+**Do not skip the transparency sentence.** It is also stated in `README.md` and `converter/README.md`.
+
+---
+
+### Scene 9 — Close (4:20–4:40)
 **Screen:** README top (title + Results table) or the dashboard header.
 
 > "LegacyLift turns legacy migration from weeks of risky manual work into a repeatable workflow: explain, protect, migrate, prove.
-> All prompts are in the repository, so any team can run it on their own legacy code. Thank you."
+> All prompts are in the repository, including a generic template, so any team can run it on their own legacy code. Thank you."
 
 ---
 
@@ -115,12 +132,16 @@
 | javax files | 14 → 0 | CHANGELOG.md |
 | Time | 1.7 h vs 24 h estimate → 92.9% saved | metrics.json |
 | Bobcoins | 35.44 + 3.79 = 39.23 | bob_sessions/ |
+| Converter: PetClinic | Java 21 + Boot 3.4.13, 41/41 original tests (1 skipped, as before) | converter/samples/README.md |
+| Converter: JPA sample | SUCCESS in ~3 minutes (196 s) | converter/samples/README.md |
 
 **Always say "estimate" for the 24 hours.** It is not a measured number.
+**Always say the converter was built with Claude Code, not IBM Bob.**
 
 ## Editing tips
 
 - Cut the Maven download and test-running wait; keep only `java -version` and the final summary lines.
+- In Scene 8, cut or speed up the conversion wait (4x); keep each step label visible for a second.
 - Zoom in (crop) on the terminal result and the KPI tiles.
 - Add a title card at the start: "LegacyLift – IBM Bob 2.0 Hackathon" and the team name.
 - Add the GitHub link on the last frame.
