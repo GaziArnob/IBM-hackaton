@@ -115,3 +115,6 @@ $RECYCLE.BIN/
 reports/*.pdf
 reports/*.html
 reports/*.docx
+
+# Converter test samples are intentional
+!converter/samples/*.zip
