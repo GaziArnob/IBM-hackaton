@@ -152,19 +152,19 @@ class OwnerTests {
 	@Test
 	void addVisit_withNullPetId_throwsIllegalArgumentException() {
 		assertThatIllegalArgumentException().isThrownBy(() -> owner.addVisit(null, new Visit()))
-				.withMessageContaining("Pet identifier must not be null");
+			.withMessageContaining("Pet identifier must not be null");
 	}
 
 	@Test
 	void addVisit_withNullVisit_throwsIllegalArgumentException() {
 		assertThatIllegalArgumentException().isThrownBy(() -> owner.addVisit(existingPet.getId(), null))
-				.withMessageContaining("Visit must not be null");
+			.withMessageContaining("Visit must not be null");
 	}
 
 	@Test
 	void addVisit_withUnknownPetId_throwsIllegalArgumentException() {
 		assertThatIllegalArgumentException().isThrownBy(() -> owner.addVisit(999, new Visit()))
-				.withMessageContaining("Invalid Pet identifier");
+			.withMessageContaining("Invalid Pet identifier");
 	}
 
 }
